@@ -1,8 +1,13 @@
 <template>
   <div>
-    <VButton ref="buttonRef" type="success" plain @click="console.log(1111)">按钮</VButton>
-    <VButton type="primary" loading>按钮</VButton>
-    <VButton type="primary" icon="house">按钮</VButton>
+    <Dropdown trigger="click" :menu-options="options">
+      <img src="./assets/logo.svg" width="100" height="100"/>
+    </Dropdown>
+    <div>
+      <VButton ref="buttonRef" type="success" plain @click="console.log(1111)">按钮</VButton>
+      <VButton type="primary" loading>按钮</VButton>
+      <VButton type="primary" icon="house">按钮</VButton>
+    </div>
     <Collapse v-model="openValue" accordion>
       <Item name="a">
         <template #title>
@@ -24,17 +29,26 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, h } from 'vue'
 import type { ButtonInstance } from './components/Button/types'
 import VButton from './components/Button/Button.vue'
 import Collapse from './components/Collapse/Collapse.vue'
 import Item from './components/Collapse/CollapseItem.vue'
 import Icon from './components/Icon/Icon.vue'
+import ToolTip from './components/ToolTip/ToolTip.vue'
+import Dropdown from './components/Dropdown/Dropdown.vue'
+import type {MenuOption} from '@/components/Dropdown/types'
 const buttonRef = ref<ButtonInstance | null>(null)
 onMounted(() => {
   console.log(buttonRef.value?.a)
 })
 const openValue = ref(['a'])
+const options: MenuOption[] = [
+  { key: 1, label: h('b', 'this is bold') },
+  { key: 2, label: 'item2', disabled: true },
+  { key: 3, label: 'item3', divided: true },
+  { key: 4, label: 'item4' }
+]
 </script>
 
 <style scoped></style>
