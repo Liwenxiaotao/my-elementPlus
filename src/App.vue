@@ -1,7 +1,12 @@
 <template>
   <div>
-    <Dropdown trigger="click" :menu-options="options">
-      <img src="./assets/logo.svg" width="100" height="100"/>
+    <Dropdown
+      trigger="click"
+      :menu-options="options"
+      @visible-change="mConsole('visible change')"
+      @select="(e) => mConsole('select', e)"
+    >
+      <img src="./assets/logo.svg" width="100" height="100" />
     </Dropdown>
     <div>
       <VButton ref="buttonRef" type="success" plain @click="console.log(1111)">按钮</VButton>
@@ -36,11 +41,22 @@ import Collapse from './components/Collapse/Collapse.vue'
 import Item from './components/Collapse/CollapseItem.vue'
 import Icon from './components/Icon/Icon.vue'
 import ToolTip from './components/ToolTip/ToolTip.vue'
-import Dropdown from './components/Dropdown/Dropdown.vue'
-import type {MenuOption} from '@/components/Dropdown/types'
+import Dropdown from './components/Dropdown/Dropdown'
+import type { MenuOption } from '@/components/Dropdown/types'
+import Message from './components/Message/Message.vue'
+import { createMessage } from './components/Message/Message'
 const buttonRef = ref<ButtonInstance | null>(null)
+const mConsole = (...arg: any) => {
+  console.log(...arg)
+}
 onMounted(() => {
   console.log(buttonRef.value?.a)
+  const instance = createMessage({ message: 'aaa', duration: 0, type: 'success' })
+  createMessage({ message: 'bbb', duration: 3000, type: 'warning' }),
+    createMessage({ message: 'ccc', duration: 5000, type: 'danger' })
+  setTimeout(() => {
+    instance.close()
+  }, 1000)
 })
 const openValue = ref(['a'])
 const options: MenuOption[] = [
