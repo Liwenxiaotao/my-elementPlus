@@ -1,5 +1,24 @@
 <template>
   <div>
+    {{ inputValue }}
+    <VInput type="text" v-model="inputValue" :clearable="true" showPassword>
+      <template #prepend>
+        aaa
+      </template>
+      <template #append>
+        bbb
+      </template>
+      <template #prefix>
+        <Icon icon="user"></Icon>
+      </template>
+    </VInput>
+    {{ switchValue }}
+    <VSwitch
+     v-model="switchValue"
+      active-value="right"
+      inactive-value="wrong"
+       ></VSwitch>
+    
     <Dropdown
       trigger="click"
       :menu-options="options"
@@ -45,6 +64,8 @@ import Dropdown from './components/Dropdown/Dropdown'
 import type { MenuOption } from '@/components/Dropdown/types'
 import Message from './components/Message/Message.vue'
 import { createMessage } from './components/Message/Message'
+import VInput from './components/Input/Input.vue'
+import VSwitch from './components/Switch/Switch.vue'
 const buttonRef = ref<ButtonInstance | null>(null)
 const mConsole = (...arg: any) => {
   console.log(...arg)
@@ -56,6 +77,7 @@ onMounted(() => {
     createMessage({ message: 'ccc', duration: 5000, type: 'danger' })
   setTimeout(() => {
     instance.close()
+    inputValue.value = 'bbb'
   }, 1000)
 })
 const openValue = ref(['a'])
@@ -65,6 +87,8 @@ const options: MenuOption[] = [
   { key: 3, label: 'item3', divided: true },
   { key: 4, label: 'item41' }
 ]
+const inputValue = ref('aaa')
+const switchValue = ref('right')
 </script>
 
 <style scoped></style>

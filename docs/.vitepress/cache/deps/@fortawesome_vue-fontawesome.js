@@ -9,7 +9,7 @@ import {
   defineComponent,
   h,
   watch
-} from "./chunk-XZ6EB4FS.js";
+} from "./chunk-HQVAGNKX.js";
 
 // node_modules/@fortawesome/vue-fontawesome/index.es.js
 function ownKeys(e, r) {
