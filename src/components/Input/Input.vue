@@ -8,7 +8,8 @@
         'is-prepend': $slots.prepend,
         'is-append': $slots.append,
         'is-prefix': $slots.prefix,
-        'is-suffix': $slots.suffix
+        'is-suffix': $slots.suffix,
+        'is-focus': isFocus
     }"
     @click="keepFocus"
   >

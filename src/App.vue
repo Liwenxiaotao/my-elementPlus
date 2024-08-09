@@ -18,7 +18,10 @@
       active-value="right"
       inactive-value="wrong"
        ></VSwitch>
-    
+    <div>
+      <Select v-model="test"  clearable placeholder="基础选择器，请选择" :options="options2" />
+      <span>{{test}}</span>
+    </div>
     <Dropdown
       trigger="click"
       :menu-options="options"
@@ -66,6 +69,7 @@ import Message from './components/Message/Message.vue'
 import { createMessage } from './components/Message/Message'
 import VInput from './components/Input/Input.vue'
 import VSwitch from './components/Switch/Switch.vue'
+import Select from './components/Select/Select.vue'
 const buttonRef = ref<ButtonInstance | null>(null)
 const mConsole = (...arg: any) => {
   console.log(...arg)
@@ -87,8 +91,31 @@ const options: MenuOption[] = [
   { key: 3, label: 'item3', divided: true },
   { key: 4, label: 'item41' }
 ]
+const options2 = [
+  { label: 'hello', value: '1' },
+  { label: 'xyz', value: '2' },
+  { label: 'testing', value: '3' },
+  { label: 'check', value: '4', disabled: true }
+]
+const test = ref('')
 const inputValue = ref('aaa')
 const switchValue = ref('right')
+const customRender = (option: any) => {
+  return h('div', {className: 'xyz'}, [h('b', option.label), h('span', option.value)])
+}
+const handleFetch = (query: string) => {
+  if (!query) return Promise.resolve([])
+  return fetch(`https://api.github.com/search/repositories?q=${query}`)
+  .then(res => res.json())
+  .then(({items}) => {
+    return items.slice(0, 10).map((item: any) => {
+      return {
+        label: item.name,
+        value: item.node_id
+      }
+    })
+  })
+}
 </script>
 
 <style scoped></style>

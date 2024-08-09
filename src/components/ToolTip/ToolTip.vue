@@ -101,6 +101,9 @@ useClickOutside(popperContainNode, () => {
     if (props.trigger === 'click' && isOpen.value && !props.manual) {
         finalCloseDebounce()
     }
+    if (isOpen.value) {
+        emits('click-outside', true)
+    }
 })
 if (!props.manual) {
     attachEvents()

@@ -13,6 +13,7 @@ export interface ToolTipProps {
 
 export interface ToolTipEmit {
     (e: 'visible-change', value: boolean) : void;
+    (e: 'click-outside', value: boolean): void;
 }
 
 export interface ToolTipInstance {
