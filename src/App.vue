@@ -2,25 +2,17 @@
   <div>
     {{ inputValue }}
     <VInput type="text" v-model="inputValue" :clearable="true" showPassword>
-      <template #prepend>
-        aaa
-      </template>
-      <template #append>
-        bbb
-      </template>
+      <template #prepend> aaa </template>
+      <template #append> bbb </template>
       <template #prefix>
         <Icon icon="user"></Icon>
       </template>
     </VInput>
     {{ switchValue }}
-    <VSwitch
-     v-model="switchValue"
-      active-value="right"
-      inactive-value="wrong"
-       ></VSwitch>
+    <VSwitch v-model="switchValue" active-value="right" inactive-value="wrong"></VSwitch>
     <div>
-      <Select v-model="test"  clearable placeholder="基础选择器，请选择" :options="options2" />
-      <span>{{test}}</span>
+      <Select v-model="test" clearable placeholder="基础选择器，请选择" :options="options2" />
+      <span>{{ test }}</span>
     </div>
     <Dropdown
       trigger="click"
@@ -52,11 +44,28 @@
     </Collapse>
     <icon :icon="'user-secret'" color="#ff0000"></icon>
     {{ openValue }}
+    <Form ref="formRef" :model="form" :rules="rules">
+      <FormItem label="name" prop="name">
+        <VInput type="text" v-model="form.name" />
+      </FormItem>
+      <FormItem label="email" prop="email">
+        <template #label="{ label }">
+          <VButton type="success">{{ label }}</VButton>
+        </template>
+        <VInput type="text" v-model="form.email" />
+      </FormItem>
+      <FormItem>
+        <VButton @click.prevent="submit" type="primary">提交</VButton>
+        <VButton @click.prevent="reset" type="primary" plain>重置</VButton>
+      </FormItem>
+    </Form>
+
+    <p>{{ form }}</p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, h } from 'vue'
+import { onMounted, ref, h, reactive } from 'vue'
 import type { ButtonInstance } from './components/Button/types'
 import VButton from './components/Button/Button.vue'
 import Collapse from './components/Collapse/Collapse.vue'
@@ -70,6 +79,8 @@ import { createMessage } from './components/Message/Message'
 import VInput from './components/Input/Input.vue'
 import VSwitch from './components/Switch/Switch.vue'
 import Select from './components/Select/Select.vue'
+import Form from './components/Form/Form.vue'
+import FormItem from './components/Form/FormItem.vue'
 const buttonRef = ref<ButtonInstance | null>(null)
 const mConsole = (...arg: any) => {
   console.log(...arg)
@@ -101,20 +112,43 @@ const test = ref('')
 const inputValue = ref('aaa')
 const switchValue = ref('right')
 const customRender = (option: any) => {
-  return h('div', {className: 'xyz'}, [h('b', option.label), h('span', option.value)])
+  return h('div', { className: 'xyz' }, [h('b', option.label), h('span', option.value)])
 }
 const handleFetch = (query: string) => {
   if (!query) return Promise.resolve([])
   return fetch(`https://api.github.com/search/repositories?q=${query}`)
-  .then(res => res.json())
-  .then(({items}) => {
-    return items.slice(0, 10).map((item: any) => {
-      return {
-        label: item.name,
-        value: item.node_id
-      }
+    .then((res) => res.json())
+    .then(({ items }) => {
+      return items.slice(0, 10).map((item: any) => {
+        return {
+          label: item.name,
+          value: item.node_id
+        }
+      })
     })
-  })
+}
+const form = reactive({
+  name: '',
+  email: ''
+})
+const rules = reactive({
+  name: [
+    { type: 'string', required: true, message: 'Please input your name', trigger: 'blur' },
+    { type: 'string', required: true, trigger: 'input' }
+  ],
+  email: [{ type: 'email', required: true, trigger: 'blur' }]
+})
+const formRef = ref()
+const submit = async () => {
+  try {
+    await formRef.value?.validate()
+    console.log('submit success')
+  } catch (e) {
+    console.log('error', e)
+  }
+}
+const reset = () => {
+  formRef.value?.resetFields()
 }
 </script>
 
